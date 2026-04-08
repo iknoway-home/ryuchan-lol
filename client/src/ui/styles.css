@@ -1,0 +1,500 @@
+body { margin:0; font-family:sans-serif; }
+
+.app {
+  display: grid;
+  grid-template-columns: 220px 1fr 320px 220px;
+  height: 100vh;
+}
+
+.boardWrap {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #222;
+}
+
+.board {
+  position: relative;
+  width: 900px;
+  height: 900px;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #111;
+}
+
+.zoneRect {
+  position: absolute;
+  border: 1px dashed rgba(255,255,255,0.3);
+  cursor: pointer;
+}
+
+.zoneSelected {
+  border: 2px solid yellow;
+}
+
+.zoneMoveCandidate {
+  outline: 3px solid #ffd54f;
+  box-shadow: 0 0 12px rgba(255, 213, 79, 0.85);
+}
+
+.zoneId {
+  font-size: 10px;
+  color: white;
+  background: rgba(0,0,0,0.5);
+}
+
+.unit {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: white;
+  border-radius: 999px;
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 7px;
+  font-weight: 500;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+  z-index: 20;
+}
+
+.unitInitial {
+  line-height: 1;
+}
+
+.unitBlue { border: 2px solid blue; }
+.unitRed { border: 2px solid red; }
+.unitDead { opacity: 0.4; }
+
+.unitSelected {
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 4px #22c55e,
+    0 2px 8px rgba(0,0,0,0.35);
+}
+
+.structureIcon {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: white;
+  border-radius: 6px;
+  padding: 3px;
+  font-size: 10px;
+}
+
+.structureBlue { border: 2px solid blue; }
+.structureRed { border: 2px solid red; }
+.structureDead { opacity: 0.3; }
+
+.rightSide {
+  width: 320px;
+  background: #f5f5f5;
+  overflow: auto;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.teamPanel {
+  background: #e5e7eb;
+  padding: 10px;
+  overflow: auto;
+  border-right: 1px solid #cbd5e1;
+}
+
+.teamPanelRed {
+  border-right: none;
+  border-left: 1px solid #cbd5e1;
+}
+
+.teamPanelTitle {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.teamRow {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: white;
+  border-radius: 10px;
+  padding: 8px;
+  margin-bottom: 8px;
+}
+
+.teamRowDead {
+  opacity: 0.45;
+}
+
+.teamRole {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: #111827;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.teamStats {
+  font-size: 12px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.structureSide.neutral {
+  color: #374151;
+}
+
+.structureEmpty {
+  font-size: 12px;
+  color: #6b7280;
+  padding: 4px 0;
+}
+
+.teamStructureBlock {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid #cbd5e1;
+}
+
+.teamStructureTitle {
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.teamStructureRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  background: white;
+  border-radius: 8px;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+}
+
+.teamStructureName {
+  flex: 1;
+  font-family: ui-monospace, monospace;
+  font-size: 11px;
+  word-break: break-word;
+}
+
+.teamStructureHp {
+  margin-left: 8px;
+}
+
+.teamStructureRespawn {
+  margin-left: 8px;
+  color: #555;
+}
+
+.actionPanel {
+  background: #f8fafc;
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.selectedZoneBox {
+  background: #e2e8f0;
+  padding: 8px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.actionRow {
+  background: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.actionRowSelected {
+  border: 2px solid #22c55e;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.12);
+}
+
+.actionRole {
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.actionTypeButtons,
+.targetButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.actionTypeButtons button,
+.targetButtons button,
+.submitTurn,
+.actionSection button,
+.rightSide > button {
+  border: 1px solid #94a3b8;
+  background: #fff;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.actionTypeButtons button:hover,
+.targetButtons button:hover,
+.submitTurn:hover,
+.actionSection button:hover,
+.rightSide > button:hover {
+  background: #f1f5f9;
+}
+
+.targetSelected {
+  background: #dbeafe !important;
+  border-color: #3b82f6 !important;
+}
+
+.actionSection {
+  margin-top: 6px;
+}
+
+.actionLabel {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.actionPreview,
+.actionCandidates {
+  font-size: 12px;
+  color: #334155;
+  margin-bottom: 6px;
+  word-break: break-word;
+}
+
+.targetTitle {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.targetEmpty {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.submitTurn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px;
+}
+
+.gameInfoBox {
+  margin-top: 10px;
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  border-radius: 10px;
+  padding: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.errorBox {
+  margin-top: 10px;
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+  border-radius: 10px;
+  padding: 8px;
+  font-size: 12px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.turnLogPanel {
+  margin-top: 10px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.turnLogPanel h3 {
+  margin: 0 0 8px 0;
+}
+
+.turnLogEmpty {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.turnLogEntry {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 8px;
+  margin-top: 8px;
+}
+
+.turnLogEntry:first-of-type {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+.turnLogHeader {
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.turnLogList {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.minionCluster {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  z-index: 18;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+
+.minionClusterBlue {
+  background: rgba(37, 99, 235, 0.92);
+}
+
+.minionClusterRed {
+  background: rgba(220, 38, 38, 0.92);
+}
+
+.minionDot {
+  font-size: 10px;
+  line-height: 1;
+}
+
+.minionCount {
+  font-size: 10px;
+  line-height: 1;
+}
+
+.zoneMoveCandidate {
+  outline: 3px solid #ffd54f;
+  box-shadow: 0 0 12px rgba(255, 213, 79, 0.85);
+}
+
+.actionRowSelected {
+  border: 2px solid #22c55e;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.12);
+}
+
+.unitSelected {
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 4px #22c55e,
+    0 2px 8px rgba(0,0,0,0.35);
+}
+
+.turnLogPanel {
+  margin-top: 10px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px;
+  max-height: 320px;
+  overflow: auto;
+}
+
+.turnLogPanel h3 {
+  margin: 0 0 8px 0;
+}
+
+.turnLogEmpty {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.turnLogEntry {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 8px;
+  margin-top: 8px;
+}
+
+.turnLogEntry:first-of-type {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+.turnLogHeader {
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.turnLogList {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.minionCluster {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  z-index: 18;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+
+.minionClusterBlue {
+  background: rgba(37, 99, 235, 0.92);
+}
+
+.minionClusterRed {
+  background: rgba(220, 38, 38, 0.92);
+}
+
+.minionDot {
+  font-size: 10px;
+  line-height: 1;
+}
+
+.minionCount {
+  font-size: 10px;
+  line-height: 1;
+}
+
+.minionHpText {
+  font-size: 10px;
+  line-height: 1;
+  opacity: 0.95;
+}
